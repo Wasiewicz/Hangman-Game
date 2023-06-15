@@ -5,11 +5,9 @@ import com.HangmanGame.service.HangmanMechanics;
 import java.util.Scanner;
 
 public class MainMenu {
-    public MainMenu(HangmanMechanics hangmanMechanics) {
-        this.hangmanMechanics = hangmanMechanics;
+    private final HangmanMechanics hangmanMechanics = new HangmanMechanics();
+    public MainMenu() {
     }
-
-    private final HangmanMechanics hangmanMechanics;
     Scanner scn = new Scanner(System.in);
     String nickname;
 
@@ -19,26 +17,22 @@ public class MainMenu {
         nickname = scn.nextLine();
         System.out.println();
         showMenu();
-
     }
 
-    private void showMenu() {
+    public void showMenu() {
         System.out.println(ConsoleColors.stars + "\n");
         System.out.println("Enter your choice: ");
         System.out.println("1. Start Game");
         System.out.println("2. Game Rules");
         System.out.println("3. Show Scoreboard");
         System.out.println("4. Exit");
-        playerChose();
+        processPlayerChoice();
     }
 
-    private void playerChose() {
+    private void processPlayerChoice() {
         int playerChose = getPlayerChose();
         switch (playerChose) {
-            case 1 ->{
-                hangmanMechanics.startGame();
-                //pickDifficultyLevel();
-            }
+            case 1 -> choseDifficulty();
             case 2 -> hangmanMechanics.showGameRules();
             case 3 -> hangmanMechanics.showScoreboard();
             case 4 -> hangmanMechanics.endGame();
@@ -50,6 +44,20 @@ public class MainMenu {
         }
     }
 
+    private void choseDifficulty() {
+        System.out.println("""
+                Select difficulty level:\s
+                 1: Normal
+                 2: Hard
+                 3: Back""");
+        switch (getPlayerChose()) {
+            case 1 -> hangmanMechanics.startGame(true);
+            case 2 -> hangmanMechanics.startGame(false);
+            case 3 -> showMenu();
+            default -> System.out.println("Enter valid number");
+        }
+    }
+
     private int getPlayerChose() {
         while (!scn.hasNextInt()) {
             scn.nextLine();
@@ -57,17 +65,4 @@ public class MainMenu {
         }
         return scn.nextInt();
     }
-
-//    private void pickDifficultyLevel() {
-//        System.out.println("Choose a difficulty level: ");
-//        System.out.println("1. Normal");
-//        System.out.println("2. Hard");
-//        System.out.println("3. Back");
-//        int playerChose = getPlayerChose();
-//        switch (playerChose){
-//
-//        }
-//    }
 }
-
-

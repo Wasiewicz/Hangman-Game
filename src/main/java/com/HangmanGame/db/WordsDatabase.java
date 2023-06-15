@@ -46,7 +46,6 @@ public class WordsDatabase {
                     "Beach Volleyball",
                     "Ice Dance Skating"},
             "countries", new String[]{
-                    "chocolate",
                     "Bosnia and Herzegovina",
                     "United States of America",
                     "United Kingdom of Great Britain",
