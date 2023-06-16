@@ -1,13 +1,15 @@
 package com.HangmanGame.service;
 
 import com.HangmanGame.db.WordsDatabase;
-import com.HangmanGame.menu.ConsoleColors;
 import com.HangmanGame.menu.MainMenu;
+import com.HangmanGame.service.db.DatabaseConnection;
+import com.HangmanGame.service.db.DatabaseManager;
 import com.HangmanGame.service.word.EasyWord;
 import com.HangmanGame.service.word.HardWord;
 
-import java.util.Arrays;
 import java.util.Scanner;
+
+import static com.HangmanGame.menu.ConsoleColors.*;
 
 public class HangmanMechanics {
     private final WordsDatabase wordsDatabase = new WordsDatabase();
@@ -16,9 +18,24 @@ public class HangmanMechanics {
     private final Scanner scn = new Scanner(System.in);
     private int lives = 3;
     private boolean playerTurn = true;
+    private boolean isNormal = true;
+    private final DatabaseConnection databaseConnection = new DatabaseConnection();
+    private final DatabaseManager databaseManager = new DatabaseManager(databaseConnection);
 
 
-    public void startGame(boolean isNormalDifficulty) {
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    String nickname;
+    MainMenu mainMenu;
+
+    public HangmanMechanics() {
+        mainMenu = new MainMenu(this);
+    }
+
+    public void startGame(boolean isNormalDifficulty, String nickname) {
+        setNickname(nickname);
         if (isNormalDifficulty)
             setNormalDifficulty();
         else
@@ -29,7 +46,7 @@ public class HangmanMechanics {
         StringBuilder maskedWord = new StringBuilder();
         char[] wordChars = randomWord.toLowerCase().toCharArray();
         initializeGame(maskedWord, wordChars);
-        System.out.println("Category: " + category + " Word: " + Arrays.toString(wordChars) + " " + maskedWord);
+        System.out.println("Category: " + category.toUpperCase() + "\n" + "   " + maskedWord);
 
         while (playerTurn)
             getCharEnterByPlayer(category, maskedWord, wordChars, randomWord.toLowerCase());
@@ -39,16 +56,19 @@ public class HangmanMechanics {
         for (char wordChar : wordChars)
             maskedWord.append(wordChar == ' ' ? ' ' : '_');
 
-        System.out.println("Your lives: " + lives);
+        System.out.println(RED_BOLD_BRIGHT + "Your lives: " + lives + RESET);
     }
 
     private void setNormalDifficulty() {
+        isNormal = true;
         String randomCategory = easyWord.getRandomCategory();
         String randomWord = easyWord.getRandomWord(randomCategory);
         setDifficulty(randomCategory, randomWord.toLowerCase());
+
     }
 
     private void setHardDifficulty() {
+        isNormal = false;
         String randomCategory = hardWord.getRandomCategory();
         String randomWord = hardWord.getRandomWord(randomCategory);
         setDifficulty(randomCategory, randomWord);
@@ -67,36 +87,35 @@ public class HangmanMechanics {
             }
             if (!letterGuessed) {
                 lives--;
-                System.out.println("Wrong guess. Lives remaining: " + lives);
+                System.out.println(RED_BOLD_BRIGHT + "Wrong guess!!! Lives remaining: " + lives +
+                        RESET);
                 if (lives <= 0) {
                     playerTurn = false;
                     loseGame();
                     return;
                 }
             }
-
         }
-        System.out.println("Category: " + randomCategory + " Word: " + Arrays.toString(wordChars) + " " + maskedWord);
+        System.out.println("Category: " + randomCategory.toUpperCase() + "\n" + "  " + maskedWord);
         if (maskedWord.toString().equals(randomWord)) {
             playerTurn = false;
             winGame();
-
-
         }
     }
 
     public void endGame() {
-        System.out.println(ConsoleColors.goodbayString);
+        System.out.println(goodbayString);
     }
 
-    public boolean winGame() {
-        System.out.println(ConsoleColors.win);
+    public void winGame() {
+        System.out.println(win);
+        int points = isNormal ? 10 : 20;
+        databaseManager.addPoints(points, nickname);
         oneMoreGame();
-        return true;
     }
 
     public void loseGame() {
-        System.out.println(ConsoleColors.lose);
+        System.out.println(lose);
         oneMoreGame();
     }
 
@@ -106,7 +125,6 @@ public class HangmanMechanics {
                 1: Yes
                 2: No""");
         if (scn.nextInt() == 1) {
-            MainMenu mainMenu = new MainMenu();
             mainMenu.showMenu();
             return;
         }

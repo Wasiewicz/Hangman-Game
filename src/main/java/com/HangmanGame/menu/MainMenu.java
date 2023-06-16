@@ -6,28 +6,30 @@ import com.HangmanGame.service.db.DatabaseManager;
 import java.util.Scanner;
 
 public class MainMenu {
-    private final HangmanMechanics hangmanMechanics = new HangmanMechanics();
+    private final HangmanMechanics hangmanMechanics;
     private final DatabaseManager databaseManager;
+    private String nickname;
 
-    public MainMenu() {
+    public MainMenu(HangmanMechanics hangmanMechanics) {
         com.HangmanGame.service.db.DatabaseConnection databaseConnection = new com.HangmanGame.service.db.DatabaseConnection();
         databaseManager = new DatabaseManager(databaseConnection);
+        this.hangmanMechanics = hangmanMechanics;
     }
 
     Scanner scn = new Scanner(System.in);
-    String nickname;
 
     public void welcome() {
         System.out.println(ConsoleColors.welcomeString);
         System.out.println("Welcome to Hangman game" + ", please enter you nickname:");
         nickname = scn.nextLine();
-        databaseManager.insertUser(nickname,0);
+        databaseManager.insertUser(nickname, 0);
         System.out.println();
         showMenu();
     }
 
+
     public void showMenu() {
-        System.out.println(ConsoleColors.stars + "\n");
+        System.out.println("\n" + ConsoleColors.stars + "\n");
         System.out.println("Enter your choice: ");
         System.out.println("1. Start Game");
         System.out.println("2. Game Rules");
@@ -37,9 +39,9 @@ public class MainMenu {
     }
 
     private void processPlayerChoice() {
-        int playerChose = getPlayerChose();
-        switch (playerChose) {
-            case 1 -> choseDifficulty();
+        int playerChoice = getPlayerChoice();
+        switch (playerChoice) {
+            case 1 -> chooseDifficulty();
             case 2 -> {
                 hangmanMechanics.showGameRules();
                 showMenu();
@@ -57,21 +59,22 @@ public class MainMenu {
         }
     }
 
-    private void choseDifficulty() {
+    private void chooseDifficulty() {
         System.out.println("""
                 Select difficulty level:\s
                  1: Normal
                  2: Hard
                  3: Back""");
-        switch (getPlayerChose()) {
-            case 1 -> hangmanMechanics.startGame(true);
-            case 2 -> hangmanMechanics.startGame(false);
+        switch (getPlayerChoice()) {
+            case 1 -> hangmanMechanics.startGame(true, nickname);
+            case 2 -> hangmanMechanics.startGame(false, nickname);
             case 3 -> showMenu();
             default -> System.out.println("Enter valid number");
         }
     }
 
-    private int getPlayerChose() {
+
+    private int getPlayerChoice() {
         while (!scn.hasNextInt()) {
             scn.nextLine();
             System.out.println("Enter valid number");
