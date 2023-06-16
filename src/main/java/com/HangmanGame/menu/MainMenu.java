@@ -1,13 +1,19 @@
 package com.HangmanGame.menu;
 
 import com.HangmanGame.service.HangmanMechanics;
+import com.HangmanGame.service.db.DatabaseManager;
 
 import java.util.Scanner;
 
 public class MainMenu {
     private final HangmanMechanics hangmanMechanics = new HangmanMechanics();
+    private final DatabaseManager databaseManager;
+
     public MainMenu() {
+        com.HangmanGame.service.db.DatabaseConnection databaseConnection = new com.HangmanGame.service.db.DatabaseConnection();
+        databaseManager = new DatabaseManager(databaseConnection);
     }
+
     Scanner scn = new Scanner(System.in);
     String nickname;
 
@@ -15,6 +21,7 @@ public class MainMenu {
         System.out.println(ConsoleColors.welcomeString);
         System.out.println("Welcome to Hangman game" + ", please enter you nickname:");
         nickname = scn.nextLine();
+        databaseManager.insertUser(nickname,0);
         System.out.println();
         showMenu();
     }
@@ -33,8 +40,14 @@ public class MainMenu {
         int playerChose = getPlayerChose();
         switch (playerChose) {
             case 1 -> choseDifficulty();
-            case 2 -> hangmanMechanics.showGameRules();
-            case 3 -> hangmanMechanics.showScoreboard();
+            case 2 -> {
+                hangmanMechanics.showGameRules();
+                showMenu();
+            }
+            case 3 -> {
+                databaseManager.showScoreboard();
+                showMenu();
+            }
             case 4 -> hangmanMechanics.endGame();
             default -> {
                 System.out.println("Enter valid number");

@@ -80,6 +80,8 @@ public class HangmanMechanics {
         if (maskedWord.toString().equals(randomWord)) {
             playerTurn = false;
             winGame();
+
+
         }
     }
 
@@ -87,9 +89,10 @@ public class HangmanMechanics {
         System.out.println(ConsoleColors.goodbayString);
     }
 
-    public void winGame() {
+    public boolean winGame() {
         System.out.println(ConsoleColors.win);
         oneMoreGame();
+        return true;
     }
 
     public void loseGame() {
@@ -112,10 +115,6 @@ public class HangmanMechanics {
 
     public void showGameRules() {
         System.out.println("game rules");
-    }
-
-    public void showScoreboard() {
-        System.out.println("scoreboard");
     }
 }
 
