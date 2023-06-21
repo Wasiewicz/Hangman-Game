@@ -1,11 +1,15 @@
 # Hangman Game
 
 Hangman Game is a simple command-line game implemented in Java. The game allows players to guess letters in order to reveal a hidden word and win the game. The project consists of multiple classes responsible for different functionalities, such as word generation, game mechanics, and database management.
-![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/16153161-64b9-443e-bed0-02bec9a01aeb)
+![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/2a03a2cc-6a2c-4f6f-bf8c-139c17e1aa7f)
 
-![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/d96b6c8c-e15b-4a35-aaed-8b2f2b0fa436)
-![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/0dea228e-16bc-4a3c-a93f-c41e2083e821)
-![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/d6f964a7-aaa3-4574-8f78-28bcbc7976ed)
+
+![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/9b93cc22-f2a1-4206-bad9-3400dab18c49)
+
+![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/a5ee5362-2ee1-4d3b-b7a1-1cbabbbee0dd)
+
+![image](https://github.com/Wasiewicz/Hangman-Game/assets/124580574/a60435a9-f4e5-4c94-84d5-4fe5f276acbf)
+
 
 
 
